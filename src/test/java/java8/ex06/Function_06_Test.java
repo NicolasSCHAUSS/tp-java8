@@ -18,19 +18,20 @@ public class Function_06_Test {
     public ExpectedException expectedException = ExpectedException.none();
 
     // tag::formatAge[]
-    // TODO compléter la méthode
-    // TODO la méthode retourne une chaîne de caractères de la forme [age=<AGE>] (exemple : [age=12])
+    // compléter la méthode
+    // la méthode retourne une chaîne de caractères de la forme [age=<AGE>] (exemple : [age=12])
     String formatAge(Supplier<Person> supplier) {
-        // TODO
-        return null;
+        
+        return "[age="+supplier.get().getAge()+"]";
     }
     // end::formatAge[]
 
 
     @Test
     public void test_supplier_formatAge() throws Exception {
-        // TODO compléter le test unitaire pour qu'il soit passant
-        String result = formatAge(null);
+        // compléter le test unitaire pour qu'il soit passant
+    	Supplier<Person> supplier = () -> new Person("Aline", "Deschamps", 35, "pass");
+        String result = formatAge(supplier);
 
         assert result.equals("[age=35]");
     }
@@ -41,8 +42,8 @@ public class Function_06_Test {
         expectedException.expect(NullPointerException.class);
         expectedException.expectMessage("require non null object");
 
-        // TODO compléter le test unitaire pour qu'il soit passant
-        Supplier<String> supplier = null;
+        // compléter le test unitaire pour qu'il soit passant
+        Supplier<String> supplier = () -> "require non null object";
 
         // Avec un paramètre null, cette méthode déclenche un NullPointerException
         Objects.requireNonNull(null, supplier);

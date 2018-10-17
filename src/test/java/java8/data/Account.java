@@ -4,6 +4,21 @@ public class Account {
 
     private Person owner;
     private Integer balance;
+    
+	/**
+	 * @param owner
+	 * @param balance
+	 */
+	public Account(Person owner, Integer balance) {
+		super();
+		this.owner = owner;
+		this.balance = balance;
+	}
+	public Account() {
+		super();
+		this.owner = null;
+		this.balance = null;
+	}
 
     public Person getOwner() {
         return owner;
@@ -20,4 +35,5 @@ public class Account {
     public void setBalance(Integer balance) {
         this.balance = balance;
     }
+
 }
