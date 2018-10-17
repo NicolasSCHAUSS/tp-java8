@@ -7,9 +7,10 @@ import java8.data.domain.Order;
 import java8.data.domain.Pizza;
 import org.junit.Test;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.*;
 
 import static org.hamcrest.Matchers.*;
@@ -25,8 +26,11 @@ public class Stream_03_Test {
 
         List<Customer> customers = new Data().getCustomers();
 
-        // TODO construire une chaîne contenant les prénoms des clients triés et séparé par le caractère "|"
-        String result = null;
+        // construire une chaîne contenant les prénoms des clients triés et séparé par le caractère "|"
+        String result = customers.stream()
+        		.map(c -> c.getFirstname())
+        		.sorted(String.CASE_INSENSITIVE_ORDER)
+        		.collect(Collectors.joining("|"));
 
         assertThat(result, is("Alexandra|Cyril|Johnny|Marion|Sophie"));
     }
@@ -36,8 +40,8 @@ public class Stream_03_Test {
 
         List<Order> orders = new Data().getOrders();
 
-        // TODO construire une Map <Client, Commandes effectuées par le client
-        Map<Customer, List<Order>> result = null;
+        // construire une Map <Client, Commandes effectuées par le client
+        Map<Customer, List<Order>> result = orders.stream().collect(Collectors.groupingBy(o->o.getCustomer()));
 
         assertThat(result.size(), is(2));
         assertThat(result.get(new Customer(1)), hasSize(4));
@@ -48,10 +52,10 @@ public class Stream_03_Test {
     public void test_partitionning() throws Exception {
         List<Pizza> pizzas = new Data().getPizzas();
 
-        // TODO Séparer la liste des pizzas en 2 ensembles :
-        // TODO true -> les pizzas dont le nom commence par "L"
-        // TODO false -> les autres
-        Map<Boolean, List<Pizza>> result = pizzas.stream().collect(partitioningBy(p -> p.getName().startsWith("L")));
+        // Séparer la liste des pizzas en 2 ensembles :
+        // true -> les pizzas dont le nom commence par "L"
+        // false -> les autres
+        Map<Boolean, List<Pizza>> result = pizzas.stream().collect(Collectors.partitioningBy(p -> p.getName().startsWith("L")));
 
         assertThat(result.get(true), hasSize(6));
         assertThat(result.get(false), hasSize(2));
@@ -62,8 +66,10 @@ public class Stream_03_Test {
 
         List<Customer> customers = new Data().getCustomers();
 
-        // TODO Construire la map Sexe -> Chaîne représentant les prénoms des clients
-        Map<Gender, String> result = null;
+        // Construire la map Sexe -> Chaîne représentant les prénoms des clients
+        Map<Gender, String> result = customers.stream()
+        		                             .sorted((c1, c2)->c1.getFirstname().compareTo(c2.getFirstname()))
+        		                             .collect(toMap(c->c.getGender(), c->c.getFirstname(), (a, b)->a+"|"+b));
 
         assertThat(result.get(Gender.F), is("Alexandra|Marion|Sophie"));
         assertThat(result.get(Gender.M), is("Cyril|Johnny"));
